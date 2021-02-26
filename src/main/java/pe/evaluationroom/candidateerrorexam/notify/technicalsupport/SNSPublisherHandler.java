@@ -31,11 +31,22 @@ public class SNSPublisherHandler implements RequestHandler<SoporteTecnicoNotific
 				toString();
 	}
 	
-	private String getEmailRecruiterMessage(String correoElectronico) {
+	private String getEmailRecruiterMessage(String correoElectronico, String observacion, Detalle detalle) {
+		String detalleError = detalle != null ? (
+				new StringBuffer("Detalle del error:").
+				append("\n").
+				append(detalle.getMensaje()).
+				append("\n\n")).
+				toString() : "";
+		
 		return (new StringBuffer("El candidato ")).
 				append(correoElectronico).
 				append(" tiene un error.").
 				append("\n\n").
+				append("Error notificado: ").
+				append(observacion).
+				append("\n\n").
+				append(detalleError).
 				append("Mensaje automatizado de EvaluationRoom.").
 				toString();
 	}
@@ -47,7 +58,7 @@ public class SNSPublisherHandler implements RequestHandler<SoporteTecnicoNotific
 		// crear cliente SNS
 		snsClient = (AmazonSNSClient) AmazonSNSClientBuilder.standard().build();
 		snsClient.publish(TOPIC_ARN_EMAIL, 
-				getEmailRecruiterMessage(input.getCorreoElectronico()), 
+				getEmailRecruiterMessage(input.getCorreoElectronico(), input.getObservacion(), input.getDetalle()), 
 				getEmailRecruiterSubject(input.getCorreoElectronico(), input.getObservacion(), input.getDetalle()));
 		
 		String output = "Sent.";
