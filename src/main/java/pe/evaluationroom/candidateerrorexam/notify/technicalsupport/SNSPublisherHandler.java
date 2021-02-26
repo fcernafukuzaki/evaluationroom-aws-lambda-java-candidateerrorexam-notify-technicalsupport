@@ -17,11 +17,11 @@ public class SNSPublisherHandler implements RequestHandler<SoporteTecnicoNotific
 
 	static final Logger logger = LogManager.getLogger(SNSPublisherHandler.class);
 	
-	private static final String TOPIC_ARN_EMAIL = "";
+	private static final String TOPIC_ARN_EMAIL = "arn:aws:sns:us-east-1:305121837514:EvaluationRoom_CandidateErrorExam-Notify-TechnicalSupport";
 	
 	private static AmazonSNSClient snsClient = null;
 	
-	private String getEmailRecruiterSubject(String correoElectronico, String observacion, String detalle) {
+	private String getEmailRecruiterSubject(String correoElectronico, String observacion, Detalle detalle) {
 		return (new StringBuffer("El candidato ")).
 				append(correoElectronico).
 				append(" ha notificado el error ").
@@ -48,7 +48,7 @@ public class SNSPublisherHandler implements RequestHandler<SoporteTecnicoNotific
 		snsClient = (AmazonSNSClient) AmazonSNSClientBuilder.standard().build();
 		snsClient.publish(TOPIC_ARN_EMAIL, 
 				getEmailRecruiterMessage(input.getCorreoElectronico()), 
-				getEmailRecruiterSubject(input.getCorreoElectronico(), input.getObservacion(), input.getDetalle());
+				getEmailRecruiterSubject(input.getCorreoElectronico(), input.getObservacion(), input.getDetalle()));
 		
 		String output = "Sent.";
 		

@@ -26,7 +26,7 @@ public class SoporteTecnicoNotificacion implements Serializable {
 		this.observacion = observacion;
 	}
 	
-	public String getDetalle() {
+	public Detalle getDetalle() {
 		return detalle;
 	}
 	
